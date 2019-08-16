@@ -1,0 +1,8 @@
+node_modules/
+build/
+.next/
+out/
+out-arweave/
+client/src/contracts/
+arweave-keyfile.json
+notes.txt

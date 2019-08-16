@@ -1,0 +1,23 @@
+{
+  "name": "crowdfunding-dapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^2.3.0",
+    "solidity-linked-list": "^2.1.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "openzeppelin-test-helpers": "^0.4.2",
+    "truffle": "^5.0.31"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "export:nextjs": "next export",
+    "export:arweave": "arweave package ./out/index.html ./out-arweave/index.html",
+    "export:clean": "rm -rf out && rm -rf out-arweave && mkdir out-arweave",
+    "export:replace": "node ./scripts/replacer/index.js",
+    "export": "npm run export:clean && npm run export:nextjs && npm run export:arweave"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@material-ui/core": "^4.3.1",
+    "@material-ui/icons": "^4.2.1",
+    "@types/web3": "^1.0.19",
+    "mobx": "^5.13.0",
+    "mobx-react": "^6.1.3",
+    "mobx-state-tree": "^3.14.1",
+    "next": "^9.0.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "styled-jsx": "^3.2.1",
+    "web3": "^1.2.1"
+  },
+  "devDependencies": {
+    "arweave": "^1.4.1",
+    "replace-in-file": "^4.1.3",
+    "@types/node": "^12.7.1",
+    "@types/react": "^16.8.25",
+    "typescript": "^3.5.3"
+  }
+}
