@@ -15,15 +15,17 @@
 
 The backend is written in solidity and it fully complies with the project requirments.
 
-While the desired crowdfund format is a huge improvement from the current run ICOs, we wanted to also support the possibility for crowdfund creators to pick different formats, in order to do this we have designed the smart contracts from the groundup to support this by boiling down all operations into `tasks` and using a `StructuredLinkedList` to efficiently store all data required.
+While the desired crowdfund format is a huge improvement from the way ICOs are currently run, we wanted to also support the possibility for crowdfund creators to pick different formats. In order to do this, we have designed the smart contracts from the groundup to support this by boiling down all operations into `tasks` and using a `StructuredLinkedList` to efficiently store all data required.
 
-Right now, the desired format is (Funding -> Milestone -> Voting), this is the default behaviour of the backend, however, it is possible to extend this functionality to allow a format like this (Funding -> Voting -> Milestone), users get to vote what to be worked on next (similar to Dash's DAO).
+Right now, the desired format is `(Funding -> Milestone -> Voting)`, this is the default behaviour of the backend. However, it is possible to extend this functionality to allow a variaty of formats. For example we could replicate Dash's DAO with this format `(Funding -> Voting -> Milestone)`, in which users get to vote on what to work on next.
 
 ## Frontend
 
 The frontend is written using next.js, react, and mobx-state-tree.
 
 Our aim is to provide the most user-friendly UI possible which makes it extremely easy for a creator or viewer to use.
+
+A hash of the website will be provided as soon as possible.
 
 ## Setup locally
 
