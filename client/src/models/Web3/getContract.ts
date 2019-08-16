@@ -1,10 +1,13 @@
 import Web3 from "web3";
-import CrowdfundDefinition from "../../contracts/Crowdfund.json";
+import {
+  abi as CrowdfundAbi,
+  bytecode as CrowdfundBytecode
+} from "../../contracts/Crowdfund.json";
 
 const definitions = {
   crowdfund: {
-    abi: CrowdfundDefinition.abi,
-    bytecode: CrowdfundDefinition.bytecode
+    abi: CrowdfundAbi,
+    bytecode: CrowdfundBytecode
   }
 };
 

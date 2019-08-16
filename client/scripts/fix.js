@@ -2,12 +2,8 @@ const path = require("path");
 const { promisify } = require("util");
 const fs = require("fs");
 const replace = require("replace-in-file");
-const walk = require("./walk");
-
-const rootDir = path.join(__dirname, "..", "..");
-const nextjsDir = path.join(rootDir, "out");
-const arweaveDir = path.join(rootDir, "out-arweave");
-const finalDir = path.join(rootDir, "out-final");
+const walk = require("./utils/walk");
+const { nextjsDir, arweaveDir, finalDir } = require("./utils/dirs");
 
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
@@ -28,8 +24,6 @@ const start = async () => {
         } else if (format.includes(".html")) {
           return "text/html";
         }
-
-        console.warn(`content type ${format} not found`);
       })();
 
       return {

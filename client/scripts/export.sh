@@ -21,6 +21,6 @@ arweave package ./out/create.html ./out-arweave/create.html
 arweave package ./out/view.html ./out-arweave/view.html
 
 echo "Fixing package..";
-node ./scripts/fix/index.js index
-node ./scripts/fix/index.js create
-node ./scripts/fix/index.js view
+node ./scripts/fix.js index
+node ./scripts/fix.js create
+node ./scripts/fix.js view
