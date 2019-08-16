@@ -14,6 +14,7 @@
   "dependencies": {
     "@material-ui/core": "^4.3.1",
     "@material-ui/icons": "^4.2.1",
+    "@next/bundle-analyzer": "^9.0.3",
     "@types/web3": "^1.0.19",
     "mobx": "^5.13.0",
     "mobx-react": "^6.1.3",
@@ -25,10 +26,11 @@
     "web3": "^1.2.1"
   },
   "devDependencies": {
-    "arweave": "^1.4.1",
-    "replace-in-file": "^4.1.3",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
     "@types/node": "^12.7.1",
     "@types/react": "^16.8.25",
+    "arweave": "^1.4.1",
+    "replace-in-file": "^4.1.3",
     "typescript": "^3.5.3"
   }
 }

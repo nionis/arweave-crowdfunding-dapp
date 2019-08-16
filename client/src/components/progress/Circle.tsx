@@ -14,17 +14,18 @@ const Circle = ({ type, selected, number, onClick }: IStep) => {
     } else if (type === "PLUS") {
       return <Add style={style} />;
     } else if (type === "ETHER") {
-      return (
-        <img
-          src="/static/images/eth.png"
-          alt="eth"
-          style={{
-            height: "6.5vh",
-            paddingTop: "0.25vh",
-            paddingBottom: "0.25vh"
-          }}
-        />
-      );
+      return <span>F</span>;
+      // return (
+      //   <img
+      //     src="/static/images/eth.png"
+      //     alt="eth"
+      //     style={{
+      //       height: "6.5vh",
+      //       paddingTop: "0.25vh",
+      //       paddingBottom: "0.25vh"
+      //     }}
+      //   />
+      // );
     }
   })();
 

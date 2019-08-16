@@ -8,6 +8,7 @@ import web3Store from "../stores/web3";
 
 const Crowdfund = types
   .model("Crowdfund", {
+    syncing: false,
     address: types.maybeNull(types.string),
     owner: types.maybeNull(types.string),
     name: types.maybeNull(types.string),
@@ -154,6 +155,8 @@ const Crowdfund = types
 
     return {
       sync: flow(function*() {
+        self.syncing = true;
+
         yield syncCrowdfund();
         yield Promise.all([
           syncFundraises(),
@@ -161,6 +164,8 @@ const Crowdfund = types
           syncVotes(),
           syncDonations()
         ]);
+
+        self.syncing = false;
       })
     };
   })

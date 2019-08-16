@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { useState, forwardRef } from "react";
+import { useState } from "react";
 import Web3 from "web3";
 import { observer } from "mobx-react";
 import TextInput from "./components/TextInput";
 import Button from "./components/Button";
 import web3Store from "./stores/web3";
+import Link from "./components/Link";
 
 const Home = observer(() => {
   const [viewAddress, setViewAddress] = useState("");
@@ -16,7 +16,7 @@ const Home = observer(() => {
       return "please unlock metamask";
     }
 
-    return null;
+    return "";
   })();
 
   return (
@@ -36,11 +36,8 @@ const Home = observer(() => {
       </div>
 
       <div className="buttons">
-        <Link href={`/create`}>
-          <Button
-            disabled={!web3Store.isLoggedIn}
-            undertext={!web3Store.isLoggedIn ? "login to metamask" : ""}
-          >
+        <Link page="Create">
+          <Button disabled={!web3Store.isLoggedIn} undertext={createButtonText}>
             CREATE
           </Button>
         </Link>
@@ -66,7 +63,19 @@ const Home = observer(() => {
           style={{ width: "32.5vh" }}
           onChange={e => setViewAddress(e.target.value)}
         />
-        <Link href={{ pathname: "/view", query: { address: viewAddress } }}>
+        <Link
+          page="View"
+          beforeClick={() => {
+            const newUrl =
+              window.location.protocol +
+              "//" +
+              window.location.host +
+              window.location.pathname +
+              `?address=${viewAddress}`;
+
+            window.history.pushState({ path: newUrl }, "", newUrl);
+          }}
+        >
           <Button style={{ marginTop: "4vh" }} disabled={!validViewAddress}>
             GO
           </Button>

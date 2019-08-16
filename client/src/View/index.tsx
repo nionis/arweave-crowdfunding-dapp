@@ -10,11 +10,17 @@ import web3Store from "../stores/web3";
 import Title from "../components/Title";
 
 let store: Instance<typeof Model>;
+let address;
 
 const init = () => {
   if (typeof window === "undefined") return;
-  const address = new URL(window.location.href).searchParams.get("address");
-  if (!address) return;
+  const foundAddress = new URL(window.location.href).searchParams.get(
+    "address"
+  );
+  if (!foundAddress) return;
+  if (foundAddress === address) return;
+
+  address = foundAddress;
 
   const contract = web3Store.getContractAt("crowdfund", address);
 
@@ -58,13 +64,13 @@ const Crowdfund = observer(() => {
 });
 
 const View = observer(() => {
-  if (!store && web3Store.isInstalled) init();
+  if (web3Store.isInstalled) init();
 
   return (
     <div className="container">
       {!web3Store.isInstalled ? (
         <MetaMask />
-      ) : !store ? (
+      ) : !store || store.crowdfund.syncing ? (
         <Loading />
       ) : !store.crowdfund.owner ? (
         <h1>Crowdfund not found</h1>

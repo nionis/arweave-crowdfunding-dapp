@@ -1,10 +1,10 @@
-import Link from "next/link";
 import MetaMask from "./MetaMask";
+import Link from "./Link";
 
 const Header = () => {
   return (
     <div className="header">
-      <Link href={`/`} scroll={false}>
+      <Link page="Home">
         <img
           src="/static/images/arweave-logo.png"
           alt="Arweave Logo"

@@ -8,7 +8,7 @@ mkdir out-final
 
 # build
 echo "Building..";
-npm run build
+ANALYZE=true npm run build
 
 # export with next.js
 echo "Exporting using next.js..";
@@ -17,10 +17,6 @@ npx next export
 # package using arweave
 echo "Packaging using arweave..";
 arweave package ./out/index.html ./out-arweave/index.html
-arweave package ./out/create.html ./out-arweave/create.html
-arweave package ./out/view.html ./out-arweave/view.html
 
 echo "Fixing package..";
 node ./scripts/fix.js index
-node ./scripts/fix.js create
-node ./scripts/fix.js view
