@@ -7,11 +7,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "export:nextjs": "next export",
-    "export:arweave": "arweave package ./out/index.html ./out-arweave/index.html",
-    "export:clean": "rm -rf out && rm -rf out-arweave && mkdir out-arweave",
-    "export:replace": "node ./scripts/replacer/index.js",
-    "export": "npm run export:clean && npm run export:nextjs && npm run export:arweave"
+    "export": "./scripts/export.sh"
   },
   "author": "",
   "license": "ISC",

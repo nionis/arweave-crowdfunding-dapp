@@ -3,6 +3,7 @@ build/
 .next/
 out/
 out-arweave/
+out-final/
 client/src/contracts/
 arweave-keyfile.json
 notes.txt

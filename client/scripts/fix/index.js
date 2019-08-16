@@ -3,13 +3,16 @@ const { promisify } = require("util");
 const fs = require("fs");
 const replace = require("replace-in-file");
 const walk = require("./walk");
-const arweave = require("./arweave");
 
 const rootDir = path.join(__dirname, "..", "..");
 const nextjsDir = path.join(rootDir, "out");
 const arweaveDir = path.join(rootDir, "out-arweave");
+const finalDir = path.join(rootDir, "out-final");
 
 const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
+
+const [targetFile] = process.argv.slice(2);
 
 const start = async () => {
   const files = await walk(nextjsDir).then(fullPaths => {
@@ -41,9 +44,9 @@ const start = async () => {
   const matches = await Promise.all(
     files.map(async file => {
       const results = await replace({
-        files: path.join(arweaveDir, "*.html"),
+        files: path.join(arweaveDir, `${targetFile}.html`),
         from: file.relativePath,
-        to: "any",
+        to: "",
         dry: true,
         countMatches: true
       });
@@ -56,37 +59,39 @@ const start = async () => {
       };
     })
   ).then(results => {
-    return results.filter(result => result.numMatches > 0);
+    return results.filter(
+      result => result.numMatches > 0 && result.file.format === ".js"
+    );
   });
 
-  const transactions = await Promise.all(
-    matches.map(async match => {
-      const fileContent = await readFile(match.file.fullPath, "utf8");
-      return arweave.create(fileContent, match.file.contentType);
-    })
-  );
+  while (matches.length > 0) {
+    const item = matches.pop();
 
-  const toReplace = matches.map((match, index) => ({
-    ...match,
-    transaction: transactions[index],
-    hash: transactions[index].id,
-    replace: `https://arweave.net/${transactions[index].id}${match.file.format}`
-  }));
-
-  while (toReplace.length > 0) {
-    const item = toReplace.pop();
-
-    console.log(item.hash, item.file.contentType, "uploading");
-    await arweave.upload(item.transaction).then(res => {
-      console.log(item.hash, res.statusText, res.data);
+    await replace({
+      files: path.join(arweaveDir, `${targetFile}.html`),
+      from: `<link rel="preload" href="${
+        item.file.relativePath
+      }" as="script"/>`,
+      to: ""
     });
 
-    // console.log("replacing", item.search);
-    // await replace({
-    //   files: path.join(arweaveDir, "*.html"),
-    //   from: item.search,
-    //   to: item.replace
-    // });
+    const htmlFile = await readFile(
+      path.join(arweaveDir, `${targetFile}.html`),
+      {
+        encoding: "utf8"
+      }
+    );
+    const scriptFile = await readFile(item.file.fullPath, {
+      encoding: "utf8"
+    });
+
+    await writeFile(
+      path.join(finalDir, `${targetFile}.html`),
+      `${htmlFile} <script>${scriptFile}</script>`,
+      {
+        encoding: "utf8"
+      }
+    );
   }
 };
 
