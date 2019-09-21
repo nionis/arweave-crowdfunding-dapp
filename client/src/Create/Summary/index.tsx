@@ -6,7 +6,7 @@ import Text from "../../components/Text";
 import Button from "../../components/Button";
 import { IStep } from "../../components/progress/types";
 import CreateModel, { Milestone as MilestoneModel } from "../Model";
-import web3Store from "../../stores/web3";
+import ethStore from "../../stores/eth";
 import { getDeadline, daysToSeconds } from "../../utils";
 
 interface ISummaryProps {
@@ -113,10 +113,7 @@ const Summary = observer(({ store }: ISummaryProps) => {
     <div className="container">
       <Title title="Crowdfund Overview" />
       <div className="total">
-        <Text
-          label="Total Fundraising Goal"
-          text={`${String(store.goal)} ETH`}
-        />
+        <Text label="Total Fundraising Goal" text={`${store.goal} ETH`} />
       </div>
 
       <Bar steps={steps} />
@@ -142,10 +139,8 @@ const Summary = observer(({ store }: ISummaryProps) => {
           <Button
             style={{ marginTop: "3vh" }}
             onClick={() => {
-              const contract = web3Store.getContract("crowdfund");
               const args: any[] = store.deploy;
-
-              store.new(contract.options.data, args);
+              store.new(args);
             }}
             disabled={store.milestones.size === 0}
             undertext={

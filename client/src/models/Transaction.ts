@@ -24,31 +24,18 @@ const Transaction = types
   .actions(self => ({
     run(fn: () => any) {
       return new Promise(async resolve => {
+        // TODO: confirmations
         fn()
-          .once("transactionHash", (hash: string) => {
+          .then(hash => {
             self.update({
-              status: "PENDING",
+              status: "MINED",
               hash
             });
           })
-          .on("confirmation", () => {
-            self.update({
-              status: "MINED"
-            });
-
-            resolve(self.hash);
-          })
-          .on("error", (error: Error) => {
+          .catch(error => {
             self.update({
               status: "ERROR",
               error: error.toString()
-            });
-
-            resolve(self.hash);
-          })
-          .then(() => {
-            self.update({
-              status: "MINED"
             });
 
             resolve(self.hash);

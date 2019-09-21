@@ -7,7 +7,7 @@ enum Type {
 
 interface IThumbButton {
   type: keyof typeof Type;
-  votes?: number;
+  votes?: string;
   disabled?: boolean;
   selected?: boolean;
   onClick?: any;
@@ -15,7 +15,7 @@ interface IThumbButton {
 
 const ThumbButton = ({
   type,
-  votes = 0,
+  votes = "0",
   disabled,
   selected,
   onClick

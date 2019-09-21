@@ -1,7 +1,7 @@
-import Web3 from "web3";
+import Eth from "ethjs";
 
 const check = () => {
-  const { web3 } = window as Window & { web3: Web3 };
+  const { web3 } = window as Window & { web3: any };
 
   const foundInWindow = typeof web3 !== "undefined";
   if (!foundInWindow) {
@@ -10,11 +10,11 @@ const check = () => {
   }
 
   console.log(`Injected web3 detected.`);
-  return new Web3(web3.currentProvider);
+  return new Eth(web3.currentProvider);
 };
 
-const getWeb3 = () => {
-  return new Promise<Web3 | undefined>(resolve => {
+const getEth = () => {
+  return new Promise<any | undefined>(resolve => {
     // If document has loaded already, try to get Web3 immediately.
     if (document.readyState === "complete") {
       return resolve(check());
@@ -27,4 +27,4 @@ const getWeb3 = () => {
   });
 };
 
-export default getWeb3;
+export default getEth;

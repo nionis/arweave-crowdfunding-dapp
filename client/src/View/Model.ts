@@ -16,7 +16,7 @@ const Model = types
     get steps() {
       const steps: IStep[] = [];
 
-      if (self.crowdfund.progressiveId > 0) {
+      if (Number(self.crowdfund.progressiveId) > 0) {
         const fundraises = Array.from(self.crowdfund.fundraises.values());
         const milestones = Array.from(self.crowdfund.milestones.values());
 

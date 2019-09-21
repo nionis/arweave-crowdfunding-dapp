@@ -6,7 +6,7 @@ import MetaMask from "../components/MetaMask";
 import Loading from "../components/Loading";
 import Model from "./Model";
 import VoteModel from "../models/Vote";
-import web3Store from "../stores/web3";
+import ethStore from "../stores/eth";
 import Title from "../components/Title";
 
 let store: Instance<typeof Model>;
@@ -22,7 +22,7 @@ const init = () => {
 
   address = foundAddress;
 
-  const contract = web3Store.getContractAt("crowdfund", address);
+  const contract = ethStore.getContractAt("crowdfund", address);
 
   store = Model.create(
     {
@@ -33,12 +33,14 @@ const init = () => {
   );
 
   store.crowdfund.sync().then(() => {
-    let started = store.crowdfund.getById(String(store.crowdfund.atTask));
+    let started = store.crowdfund.getById(store.crowdfund.atTask);
     if (getType(started) === VoteModel) {
-      started = store.crowdfund.getById(String(store.crowdfund.atTask - 1));
+      started = store.crowdfund.getById(
+        String(Number(store.crowdfund.atTask) - 1)
+      );
     }
 
-    store.select(String(started.id));
+    store.select(started.id);
   });
 };
 
@@ -64,11 +66,11 @@ const Crowdfund = observer(() => {
 });
 
 const View = observer(() => {
-  if (web3Store.isInstalled) init();
+  if (ethStore.isInstalled) init();
 
   return (
     <div className="container">
-      {!web3Store.isInstalled ? (
+      {!ethStore.isInstalled ? (
         <MetaMask />
       ) : !store || store.crowdfund.syncing ? (
         <Loading />

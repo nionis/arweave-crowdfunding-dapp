@@ -1,9 +1,9 @@
-import Web3 from "web3";
+import Eth from "ethjs";
 import { types, flow, Instance } from "mobx-state-tree";
 import { IStep } from "../components/progress/types";
 import Transaction from "../models/Transaction";
 import { daysToSeconds } from "../utils";
-import web3Store from "../stores/web3";
+import ethStore from "../stores/eth";
 
 const Milestone = types
   .model("Milestone", {
@@ -68,16 +68,16 @@ const Create = types
     get deploy() {
       const name = self.name;
       const description = self.description;
-      const fund_goal = Web3.utils.toWei(String(self.goal), "ether");
+      const fund_goal = Eth.toWei(self.goal, "ether");
       const fund_timeRequired = daysToSeconds(self.deadline);
 
       const { funds, timeRequired, descriptions } = Array.from(
         self.milestones.values()
       ).reduce(
         (all, { requiredFunds, deadline, description }) => {
-          all.funds.push(Web3.utils.toWei(String(requiredFunds), "ether"));
+          all.funds.push(Eth.toWei(requiredFunds, "ether"));
           all.timeRequired.push(daysToSeconds(deadline));
-          all.descriptions.push(Web3.utils.stringToHex(description));
+          all.descriptions.push(Eth.fromUtf8(description));
 
           return all;
         },
@@ -101,14 +101,11 @@ const Create = types
   }))
   .actions(self => {
     return {
-      new: flow(function*(bytescode: string, args: any[]) {
+      new: flow(function*(args: any[]) {
         yield self.transaction.run(() => {
-          return web3Store
-            .getContract("crowdfund")
-            .deploy({ data: bytescode, arguments: args })
-            .send({
-              from: web3Store.account
-            });
+          return ethStore.getContract("crowdfund").new(...args, {
+            from: ethStore.account
+          });
         });
       }),
 

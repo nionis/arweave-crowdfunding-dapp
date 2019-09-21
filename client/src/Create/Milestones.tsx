@@ -31,10 +31,7 @@ const Milestones = observer(({ store }: IMilestonesProps) => {
         undertext="Please fill out the information for each milestone."
       />
       <div className="total">
-        <Text
-          label="Total Fundraising Goal"
-          text={`${String(store.goal)} ETH`}
-        />
+        <Text label="Total Fundraising Goal" text={`${store.goal} ETH`} />
       </div>
 
       <Bar steps={steps} />

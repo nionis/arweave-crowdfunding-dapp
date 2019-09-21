@@ -10,9 +10,9 @@ const MilestoneStatus = [
 const Milestone = types
   .model("Milestone", {
     id: types.maybeNull(types.string),
-    fundingRequired: types.maybeNull(types.number),
-    startedAt: types.maybeNull(types.number),
-    timeRequired: types.maybeNull(types.number),
+    fundingRequired: types.maybeNull(types.string),
+    startedAt: types.maybeNull(types.string),
+    timeRequired: types.maybeNull(types.string),
     status: types.maybeNull(types.enumeration(MilestoneStatus)),
     description: types.maybeNull(types.string),
     report: types.maybeNull(types.string),

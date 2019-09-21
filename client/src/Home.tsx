@@ -1,18 +1,18 @@
 import { useState } from "react";
-import Web3 from "web3";
+import Eth from "ethjs";
 import { observer } from "mobx-react";
 import TextInput from "./components/TextInput";
 import Button from "./components/Button";
-import web3Store from "./stores/web3";
+import ethStore from "./stores/eth";
 import Link from "./components/Link";
 
 const Home = observer(() => {
   const [viewAddress, setViewAddress] = useState("");
-  const validViewAddress = Web3.utils.isAddress(viewAddress);
+  const validViewAddress = Eth.isAddress(viewAddress);
   const createButtonText = (() => {
-    if (!web3Store.isInstalled) {
+    if (!ethStore.isInstalled) {
       return "please install metamask";
-    } else if (!web3Store.isLoggedIn) {
+    } else if (!ethStore.isLoggedIn) {
       return "please unlock metamask";
     }
 
@@ -37,7 +37,7 @@ const Home = observer(() => {
 
       <div className="buttons">
         <Link page="Create">
-          <Button disabled={!web3Store.isLoggedIn} undertext={createButtonText}>
+          <Button disabled={!ethStore.isLoggedIn} undertext={createButtonText}>
             CREATE
           </Button>
         </Link>

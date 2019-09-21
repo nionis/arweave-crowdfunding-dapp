@@ -10,13 +10,13 @@ const FundraiseStatus = [
 const Fundraise = types
   .model("Fundraise", {
     id: types.maybeNull(types.string),
-    goal: types.maybeNull(types.number),
-    raised: types.maybeNull(types.number),
-    balance: types.maybeNull(types.number),
-    startedAt: types.maybeNull(types.number),
-    timeRequired: types.maybeNull(types.number),
+    goal: types.maybeNull(types.string),
+    raised: types.maybeNull(types.string),
+    balance: types.maybeNull(types.string),
+    startedAt: types.maybeNull(types.string),
+    timeRequired: types.maybeNull(types.string),
     status: types.maybeNull(types.enumeration(FundraiseStatus)),
-    userFunds: types.maybeNull(types.number)
+    userFunds: types.maybeNull(types.string)
   })
   .views(self => ({
     get deadline() {

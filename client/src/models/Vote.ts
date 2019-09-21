@@ -10,12 +10,12 @@ const VoteStatus = [
 const Vote = types
   .model("Vote", {
     id: types.maybeNull(types.string),
-    upvotes: types.maybeNull(types.number),
-    downvotes: types.maybeNull(types.number),
-    startedAt: types.maybeNull(types.number),
-    timeRequired: types.maybeNull(types.number),
+    upvotes: types.maybeNull(types.string),
+    downvotes: types.maybeNull(types.string),
+    startedAt: types.maybeNull(types.string),
+    timeRequired: types.maybeNull(types.string),
     status: types.maybeNull(types.enumeration(VoteStatus)),
-    userVote: types.maybeNull(types.number)
+    userVote: types.maybeNull(types.string)
   })
   .views(self => ({
     get deadline() {

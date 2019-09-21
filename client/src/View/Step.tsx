@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Instance } from "mobx-state-tree";
 import { observer } from "mobx-react";
-import Web3 from "web3";
+import Eth from "ethjs";
 import Text from "../components/Text";
 import Voting from "../components/Voting";
 import Button from "../components/Button";
@@ -9,7 +9,7 @@ import TextInput from "../components/TextInput";
 import CrowdfundModel from "../models/Crowdfund";
 import FundraiseModel from "../models/Fundraise";
 import MilestoneModel from "../models/Milestone";
-import web3Store from "../stores/web3";
+import ethStore from "../stores/eth";
 import { getDeadline, secondsToMs } from "../utils";
 
 type IStep = Instance<typeof FundraiseModel> | Instance<typeof MilestoneModel>;
@@ -32,10 +32,13 @@ interface IMilestoneProps {
 const Fundraise = observer(({ crowdfund, fundraise }: IFundraiseProps) => {
   const [etherInput, setEther] = useState("0");
 
-  const isOwner = crowdfund.owner === web3Store.account;
-  const deadline = getDeadline(fundraise.startedAt, fundraise.timeRequired);
-  const raised = Web3.utils.fromWei(String(fundraise.raised), "ether");
-  const goal = Web3.utils.fromWei(String(fundraise.goal), "ether");
+  const isOwner = crowdfund.owner === ethStore.account;
+  const deadline = getDeadline(
+    Number(fundraise.startedAt),
+    Number(fundraise.timeRequired)
+  );
+  const raised = Eth.fromWei(fundraise.raised, "ether");
+  const goal = Eth.fromWei(fundraise.goal, "ether");
   const status = (() => {
     if (fundraise.status === "PENDING") {
       return "Creator did not start the crowdfund yet";
@@ -87,7 +90,7 @@ const Fundraise = observer(({ crowdfund, fundraise }: IFundraiseProps) => {
             <Button
               style={{ width: "12vw", marginTop: "3vh" }}
               onClick={() => {
-                crowdfund.fund(Web3.utils.toWei(etherInput, "ether"));
+                crowdfund.fund(Eth.toWei(etherInput, "ether"));
               }}
               loading={loading}
               disabled={disabledFund}
@@ -107,7 +110,7 @@ const Fundraise = observer(({ crowdfund, fundraise }: IFundraiseProps) => {
             <div className="progress" />
           </div>
           <div className="containContri">
-            <div className="label">Contributers</div>
+            <div className="label">Contributors</div>
             <div className="contributers">
               {crowdfund.donations.map(donation => (
                 <div className="onecontributer">
@@ -275,15 +278,15 @@ const Fundraise = observer(({ crowdfund, fundraise }: IFundraiseProps) => {
 const Milestone = observer(({ crowdfund, milestone }: IMilestoneProps) => {
   const [reportInput, setReport] = useState("");
 
-  const isOwner = crowdfund.owner === web3Store.account;
+  const isOwner = crowdfund.owner === ethStore.account;
   const { claimed, report } = milestone;
-  const deadline = getDeadline(milestone.startedAt, milestone.timeRequired);
-  const fundingRequired = Web3.utils.fromWei(
-    String(milestone.fundingRequired),
-    "ether"
+  const deadline = getDeadline(
+    Number(milestone.startedAt),
+    Number(milestone.timeRequired)
   );
+  const fundingRequired = Eth.fromWei(milestone.fundingRequired, "ether");
 
-  const showClaim = isOwner && milestone.status !== "PENDING" && !claimed;
+  const showClaim = isOwner && milestone.status === "STARTED" && !claimed;
   const showReport = isOwner && milestone.status === "STARTED" && !report;
   const showRefund = milestone.status === "FAILURE";
 
@@ -308,7 +311,9 @@ const Milestone = observer(({ crowdfund, milestone }: IMilestoneProps) => {
 
   const showVoting = vote.status === "STARTED";
   const showUpdateVoteResult =
-    showVoting && isOwner && +new Date() >= secondsToMs(milestone.deadline);
+    showVoting &&
+    isOwner &&
+    +new Date() >= secondsToMs(Number(milestone.deadline));
 
   const loading = crowdfund.transaction.status === "PENDING";
   const disabled = loading;
@@ -330,9 +335,8 @@ const Milestone = observer(({ crowdfund, milestone }: IMilestoneProps) => {
       <div className="row">
         <Text
           label="Description"
-          text={Web3.utils.hexToUtf8(milestone.description)}
+          text={Eth.toUtf8(milestone.description)}
           largearea={true}
-          // padding="2vh"
         />
         <div>
           {showVoting ? <Voting crowdfund={crowdfund} vote={vote} /> : null}

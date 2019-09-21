@@ -1,11 +1,10 @@
-import Web3 from "web3";
 import { types, flow } from "mobx-state-tree";
-import getWeb3 from "./getWeb3";
+import getEth from "./getEth";
 import { getContract, getContractAt } from "./getContract";
 import { isSSR } from "../../utils";
 
 const Model = types
-  .model("Web3", {
+  .model("Eth", {
     isInstalled: types.maybeNull(types.boolean),
     account: types.maybeNull(types.string),
     networkId: types.maybeNull(types.number)
@@ -35,21 +34,21 @@ const Model = types
     }
   }))
   .actions(self => {
-    let web3: Web3 | undefined;
+    let eth: any | undefined;
 
     return {
-      _getWeb3() {
-        return web3;
+      _getEth() {
+        return eth;
       },
-      getWeb3() {
-        if (!web3) {
-          throw Error("web3 not initialized");
+      getEth() {
+        if (!eth) {
+          throw Error("eth not initialized");
         }
 
-        return web3;
+        return eth;
       },
-      setWeb3(_web3: Web3) {
-        web3 = _web3;
+      setEth(_eth: any) {
+        eth = _eth;
       }
     };
   })
@@ -60,38 +59,38 @@ const Model = types
       }
 
       // not found, check window
-      if (!self._getWeb3()) {
-        self.setWeb3(yield getWeb3());
+      if (!self._getEth()) {
+        self.setEth(yield getEth());
       }
 
-      const web3 = self._getWeb3();
+      const eth = self._getEth();
 
       // not found
-      if (typeof web3 === "undefined") {
+      if (typeof eth === "undefined") {
         self.isInstalled = false;
         return;
       }
 
       self.isInstalled = true;
-      self.setWeb3(web3);
+      self.setEth(eth);
 
-      const accounts = (yield web3.eth.getAccounts()) || [];
+      const accounts = (yield eth.accounts()) || [];
       self.account = accounts[0] || null;
 
-      const networkId = yield web3.eth.net.getId();
+      const networkId = Number(eth.currentProvider.networkVersion);
       self.networkId = networkId;
     }),
 
     getContract(name: Parameters<typeof getContract>["1"]) {
-      const web3 = self.getWeb3();
+      const eth = self.getEth();
 
-      return getContract(web3, name);
+      return getContract(eth, name);
     },
 
     getContractAt(name: Parameters<typeof getContract>["1"], address: string) {
-      const web3 = self.getWeb3();
+      const eth = self.getEth();
 
-      return getContractAt(web3, name, address);
+      return getContractAt(eth, name, address);
     }
   }));
 

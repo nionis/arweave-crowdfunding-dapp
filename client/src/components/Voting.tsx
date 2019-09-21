@@ -10,7 +10,7 @@ interface IVoting {
 }
 
 const Voting = ({ crowdfund, vote }: IVoting) => {
-  const userVoted = vote.userVote === 1 || vote.userVote === 2;
+  const userVoted = vote.userVote === "1" || vote.userVote === "2";
   const disabled = userVoted;
 
   return (
@@ -20,14 +20,14 @@ const Voting = ({ crowdfund, vote }: IVoting) => {
         <ThumbButton
           type="UP"
           disabled={disabled}
-          selected={vote.userVote === 1}
+          selected={vote.userVote === "1"}
           votes={vote.upvotes}
           onClick={() => crowdfund.vote(true)}
         />
         <ThumbButton
           type="DOWN"
           disabled={disabled}
-          selected={vote.userVote === 2}
+          selected={vote.userVote === "2"}
           votes={vote.downvotes}
           onClick={() => crowdfund.vote(false)}
         />

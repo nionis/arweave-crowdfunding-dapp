@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
-import web3Store from "../stores/web3";
+import ethStore from "../stores/eth";
 
 const GetText = ({
   isInstalled,
   isLoggedIn,
   account,
   network
-}: typeof web3Store) => {
+}: typeof ethStore) => {
   if (!isInstalled) {
     return (
       <a
@@ -31,7 +31,7 @@ const GetText = ({
 };
 
 const Metamask = observer(() => {
-  const { isLoggedIn } = web3Store;
+  const { isLoggedIn } = ethStore;
 
   return (
     <div className="metamaskStatus">
@@ -40,7 +40,7 @@ const Metamask = observer(() => {
         alt="Metamask Logo"
         className="img"
       />
-      {GetText(web3Store)}
+      {GetText(ethStore)}
 
       <style jsx>{`
         .img {
